@@ -3,20 +3,22 @@
 ##Receta de instalación de Istio en Openshift
 
 #Configuración de Memoria virtual para el despliegue de Elastichsearch
-echo "vm.max_map_count = 262144" > /etc/sysctl.d/99-elasticsearch.conf
+sysctl vm.max_map_count=262144
 
 #Necesitamos acceder al cluster como Administrador
 #Generamos un nuevo proyecto para el despliegue del operador de Istio
 oc new-project istio-operator
 #Realizamos el despliegue del operador de Istio utilizando un archivo yaml
-oc new-app -f istio_product_operator_template.yaml --param=OPENSHIFT_ISTIO_MASTER_PUBLIC_URL=192.168.99.100:8443 #IP o nombre de dominio del servidor master
+#Utilizamos la version community de Istio #IP o nombre de dominio del servidor master
+oc new-app -f istio_community_operator_template.yaml --param=OPENSHIFT_ISTIO_MASTER_PUBLIC_URL=192.168.99.100:8443
 
 #Verificamos que el operador se haya instalado a traves de los logs que este genera
 oc logs -n istio-operator $(oc -n istio-operator get pods -l name=istio-operator --output=jsonpath={.items..metadata.name})
 
 #Realizamos el despliegue del plano de Control de Service Mesh (Istio, Kiali y Jaeger)
 #Este archivo instala las herramientas utilizadas en el Service Mesh
-oc create -f cr.yaml -n istio-operator
+#Utilizamos la version community de Istio
+oc create -f cr_community.yaml -n istio-operator
 
 #Verificamos que la instalación se lleve a cabo de forma correcta
 oc get pods -n istio-system

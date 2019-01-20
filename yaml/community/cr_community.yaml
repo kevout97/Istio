@@ -1,0 +1,31 @@
+apiVersion: "istio.openshift.com/v1alpha1"
+kind: "Installation"
+metadata:
+  name: "istio-installation"
+spec:
+  deployment_type: origin
+  istio:
+    authentication: true
+    community: false
+    prefix: maistra/
+    version: 0.2.0
+  jaeger:
+    prefix: jaegertracing/
+    version: 1.7
+    elasticsearch_memory: 1Gi
+  kiali:
+    username: kiali #Colocar usuario para acceder a la consola de Kiali
+    password: eL5LHwxVPbLetjwD #Colocar contraseña del usuario para acceder a la consola de kiali
+    prefix: kiali/
+    version: v0.7.2
+  launcher:
+    openshift:
+      user: developer #usuario con del usuario de OpenShift
+      password: developer #contraseña del usuario anterior
+    github:
+      username: kevout97 #Cuenta de GitHub
+      token: c5897102986a53082c48a97cefacf1fa3523550f #Solicitar este token en GitHub
+    catalog:
+      filter: booster.mission.metadata.istio
+      branch: v71
+      repo: https://github.com/fabric8-launcher/launcher-booster-catalog.git
